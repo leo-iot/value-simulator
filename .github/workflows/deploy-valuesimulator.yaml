@@ -1,0 +1,57 @@
+name: Deploy Value-Simulator
+on:
+  push:
+    branches:
+      - main
+jobs:
+  package-value-simulator:
+    name: Package Value-Simulator
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    env:
+      IMAGE_NAME: leoiot-value-simulator
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Package
+        run: mvn package -Dmaven.test.skip
+      - name: Login to GitHub Packages
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build image
+        run: docker build . -f src/main/docker/Dockerfile.jvm --tag $IMAGE_NAME
+      - name: Push image
+        run: |
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+  start:
+    name: Start Container
+    needs: [package-value-simulator]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: install ssh key
+        uses: webfactory/ssh-agent@v0.4.1
+        with:
+          ssh-private-key: ${{ secrets.DEPLOYMENT_VALUESIM_PRIVKEY }}
+      - name: create .ssh/known_hosts
+        run: ssh-keyscan -H -t rsa -v vm09.htl-leonding.ac.at  >> ~/.ssh/known_hosts
+      - name: Run Docker Container
+        run: |
+          ssh iotadmin@vm09.htl-leonding.ac.at "
+          cd leo-iot
+          sudo docker-compose down
+          sudo docker-compose up -d
+          "
