@@ -48,7 +48,7 @@ public class MyValueGenerator {
 
     public void roomData(Room room){
 
-        subscription = Observable.interval(0, 10, TimeUnit.SECONDS)
+        subscription = Observable.interval(0, 6, TimeUnit.SECONDS)
                 .subscribe(value -> {
                     Map values = new HashMap<String, Object>();
                     values.put("temp", System.currentTimeMillis());
