@@ -1,5 +1,6 @@
 package at.htl.mqtt.client.boundary;
 
+import com.intuit.karate.junit5.Karate;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
@@ -9,13 +10,8 @@ import static org.hamcrest.CoreMatchers.is;
 @QuarkusTest
 public class ConfigEndpointTest {
 
-    @Test
-    public void testHelloEndpoint() {
-        given()
-          .when().get("/app")
-          .then()
-             .statusCode(200)
-             .body(is("Hello RESTEasy"));
+    @Karate.Test
+    Karate testGetRoom() {
+        return Karate.run("config-resource.feature").relativeTo(getClass());
     }
-
 }
