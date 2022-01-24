@@ -47,4 +47,20 @@ public class RoomRepository
         }
         return false;
     }
+
+    public boolean updateRoom(String roomName, String newName){
+        if(rooms.stream().anyMatch(r -> r.getName().equals(roomName)))
+        {
+            for (var room : rooms) {
+                if (room.getName().equals(roomName)){
+                    room.setName(newName);
+                    return true;
+                }
+            }
+        }
+        else{
+            System.out.println("Room doesnt exist");
+        }
+        return false;
+    }
 }

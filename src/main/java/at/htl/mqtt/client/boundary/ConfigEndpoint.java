@@ -27,4 +27,12 @@ public class ConfigEndpoint {
     public boolean deleteRoom(@PathParam("roomName") String roomName) {
         return roomRepo.deleteRoom(roomName);
     }
+
+    @PUT
+    @Path("updateRoom/{roomName}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean updateRoom(@PathParam("roomName") String roomName, @QueryParam("newName") String newName) {
+        return roomRepo.updateRoom(roomName, newName);
+    }
 }
