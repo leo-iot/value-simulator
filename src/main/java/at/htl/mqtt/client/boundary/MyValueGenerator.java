@@ -76,6 +76,7 @@ public class MyValueGenerator {
                     rooms = roomRepo.getAllRooms();
 
                     System.out.println("Sending value -> " + jsonValue);
+                    System.out.println( roomRepo.getAllRooms());
                 });
     }
 
