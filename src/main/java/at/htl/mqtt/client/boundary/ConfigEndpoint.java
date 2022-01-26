@@ -32,15 +32,27 @@ public class ConfigEndpoint {
     @Path("deleteRoom/{roomName}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean deleteRoom(@PathParam("roomName") String roomName) {
-        return roomRepo.deleteRoom(roomName);
+    public Response deleteRoom(@PathParam("roomName") String roomName) {
+        boolean success = roomRepo.deleteRoom(roomName);
+
+        if (success){
+            return Response.ok().build();
+        }
+
+        return Response.status(400).build();
     }
 
     @PUT
     @Path("updateRoom/{roomName}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean updateRoom(@PathParam("roomName") String roomName, @QueryParam("newName") String newName) {
-        return roomRepo.updateRoom(roomName, newName);
+    public Response updateRoom(@PathParam("roomName") String roomName, @QueryParam("newName") String newName) {
+        boolean success = roomRepo.updateRoom(roomName, newName);
+
+        if (success){
+            return Response.ok().build();
+        }
+
+        return Response.status(400).build();
     }
 }
