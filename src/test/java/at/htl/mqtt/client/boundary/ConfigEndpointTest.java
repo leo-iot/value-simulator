@@ -1,21 +1,20 @@
 package at.htl.mqtt.client.boundary;
 
+import com.intuit.karate.Results;
+import com.intuit.karate.Runner;
+import com.intuit.karate.junit5.Karate;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
 public class ConfigEndpointTest {
 
-    @Test
-    public void testHelloEndpoint() {
-        given()
-          .when().get("/app")
-          .then()
-             .statusCode(200)
-             .body(is("Hello RESTEasy"));
+    @Karate.Test
+    Karate testRoom() {
+        return Karate.run("config-resource.feature").relativeTo(getClass()).systemProperty("engine.WarnInterpreterOnly", "true");
+        //Results results = Runner.path("config-resource.feature").relativeTo(getClass()).parallel(5);
+        //assertEquals(0,results.getFailCount(), results.getErrorMessages());
     }
-
 }

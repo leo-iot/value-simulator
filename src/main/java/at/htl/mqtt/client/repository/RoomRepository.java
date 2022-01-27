@@ -15,37 +15,31 @@ public class RoomRepository
     @Inject
     MyValueGenerator myValueGenerator;
 
-    List<Room> rooms = new LinkedList();
-
-
-    public List getAllRooms() {
-        return rooms;
-    }
-
     public boolean addRoom(String roomName) {
         Room currRoom = new Room(roomName);
-        if(rooms.stream().anyMatch(r -> r.getName().equals(roomName)))
+        if(myValueGenerator.subscriptions.containsKey(roomName))
         {
             System.out.println("Room already exists");
             return false;
         }
-        boolean returnValue = rooms.add(currRoom);
 
         myValueGenerator.roomData(currRoom);
-
-        return returnValue;
+        return true;
     }
 
     public boolean deleteRoom(String roomName) {
-        for (Room room: rooms) {
-            if (room.getName().equals(roomName))
-            {
-                rooms.remove(room);
-                myValueGenerator.stop();
-                myValueGenerator.getAllRooms();
-                return true;
-            }
+        myValueGenerator.stop(roomName);
+        return true;
+    }
+
+    public boolean updateRoom(String roomName, String newName){
+        if(!myValueGenerator.subscriptions.containsKey(roomName))
+        {
+            deleteRoom(roomName);
+            addRoom(newName);
+            return true;
         }
+        System.out.println("Room doesnt exist");
         return false;
     }
 }

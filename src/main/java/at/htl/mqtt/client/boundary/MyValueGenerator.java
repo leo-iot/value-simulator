@@ -33,22 +33,10 @@ public class MyValueGenerator {
     @Inject
     RoomRepository roomRepo;
 
-    List<Room> rooms;
-
-    private Disposable subscription;
-
-     public void getAllRooms(){
-
-        rooms = roomRepo.getAllRooms();
-
-        for (Room room : rooms) {
-            roomData(room);
-        }
-    }
+    public HashMap<String, Disposable> subscriptions = new HashMap<>();
 
     public void roomData(Room room){
-
-        subscription = Observable.interval(0, 1, TimeUnit.SECONDS)
+        subscriptions.put(room.getName(), Observable.interval(0, 6, TimeUnit.SECONDS)
                 .subscribe(value -> {
                     Map values = new HashMap<String, Object>();
                     values.put("temp", System.currentTimeMillis());
@@ -73,21 +61,15 @@ public class MyValueGenerator {
                     emitter.send(MqttMessage.of("values/" + room.getName() + "/" + "co2" + "/" + "state", getBytes(jsonValue.getDouble("co2"), timeStamp)));
                     emitter.send(MqttMessage.of("values/" + room.getName() + "/" + "motion" + "/" + "state", getBytes(jsonValue.getDouble("motion"), timeStamp)));
 
-                    rooms = roomRepo.getAllRooms();
-
                     System.out.println("Sending value -> " + jsonValue);
-                });
+                }));
     }
 
-    public void stop() {
-        if (subscription != null && !subscription.isDisposed()) {
-            System.out.println("stopped");
-            subscription.dispose();
+    public void stop(String roomName) {
+        if (subscriptions.containsKey(roomName)){
+            subscriptions.get(roomName).dispose();
+            subscriptions.remove(roomName);
         }
-    }
-
-    void init(@Observes StartupEvent event) {
-         getAllRooms();
     }
 
     Double oldValue = 20.00;
