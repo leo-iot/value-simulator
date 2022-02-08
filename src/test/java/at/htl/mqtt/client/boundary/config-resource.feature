@@ -16,5 +16,5 @@ Feature: To test the config-resource
   Scenario: update the new room
     Given path 'updateRoom/testRoom'
     And  params { newName: 'newTestRoom'}
-    When method POST
+    When method PUT
     Then status 200
