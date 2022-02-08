@@ -9,15 +9,11 @@ import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
-import at.htl.mqtt.client.repository.RoomRepository;
-import org.reactivestreams.Subscription;
 
 /**
  * https://stackoverflow.com/questions/62883516/publish-subscribe-mqtt-using-smallrye-reactive-messaging-dynamically
@@ -29,9 +25,6 @@ public class MyValueGenerator {
     @Inject
     @Channel("topic-values")
     Emitter<byte[]> emitter;
-
-    @Inject
-    RoomRepository roomRepo;
 
     public HashMap<String, Disposable> subscriptions = new HashMap<>();
 
