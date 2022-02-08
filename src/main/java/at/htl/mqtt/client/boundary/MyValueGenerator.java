@@ -1,7 +1,6 @@
 package at.htl.mqtt.client.boundary;
 
 import at.htl.mqtt.client.entity.Room;
-import io.quarkus.runtime.StartupEvent;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.smallrye.reactive.messaging.mqtt.MqttMessage;
