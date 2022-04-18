@@ -27,7 +27,7 @@ public class ConfigEndpoint {
         return Response.status(400).build();
     }
 
-    @POST
+    @DELETE
     @Path("deleteRoom/{roomName}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
