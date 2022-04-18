@@ -27,6 +27,10 @@ public class RoomRepository
         return true;
     }
 
+    public double getCurrTemp(){
+        return myValueGenerator.goodTemp();
+    }
+
     public boolean deleteRoom(String roomName) {
         myValueGenerator.stop(roomName);
         return true;
