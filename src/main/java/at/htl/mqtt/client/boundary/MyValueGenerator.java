@@ -32,7 +32,7 @@ public class MyValueGenerator {
     public HashMap<String, Disposable> subscriptions = new HashMap<>();
 
     public void roomData(Room room){
-        subscriptions.put(room.getName(), Observable.interval(0, 6, TimeUnit.SECONDS)
+        subscriptions.put(room.getName(), Observable.interval(0, 60, TimeUnit.SECONDS)
                 .subscribe(value -> {
                     Map values = new HashMap<String, Object>();
                     values.put("temp", System.currentTimeMillis());
