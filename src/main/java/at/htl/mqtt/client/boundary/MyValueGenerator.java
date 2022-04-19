@@ -10,9 +10,7 @@ import org.eclipse.microprofile.reactive.messaging.Emitter;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 
@@ -31,8 +29,10 @@ public class MyValueGenerator {
 
     public HashMap<String, Disposable> subscriptions = new HashMap<>();
 
+    private List<Double> goodTemps = new LinkedList<>();
+
     public void roomData(Room room){
-        subscriptions.put(room.getName(), Observable.interval(0, 60, TimeUnit.SECONDS)
+        subscriptions.put(room.getName(), Observable.interval(0, 10, TimeUnit.SECONDS)
                 .subscribe(value -> {
                     Map values = new HashMap<String, Object>();
                     values.put("temp", System.currentTimeMillis());
@@ -95,6 +95,10 @@ public class MyValueGenerator {
        return returnValue;
     }
 
+    public List<Double> getGoodTemps(){
+        return goodTemps;
+    }
+
     public double goodTemp()
     {
         double hours = LocalDateTime.now().getHour()+((LocalDateTime.now().getMinute()/60.00*100.00)/100.00);
@@ -109,6 +113,10 @@ public class MyValueGenerator {
         //System.out.println(sum3);
         //System.out.println(hours);
         //System.out.println(LocalDateTime.now().getMinute());
+
+        double sum = sum1+sum2+sum3;
+
+        goodTemps.add(sum);
 
         return  sum1+ sum2 + sum3;
     }

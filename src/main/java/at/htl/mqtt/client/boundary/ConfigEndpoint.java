@@ -21,7 +21,7 @@ public class ConfigEndpoint {
 
     @CheckedTemplate
     public static class Templates {
-        public static native TemplateInstance temperatures(Double temp);
+        public static native TemplateInstance temperatures(List<Double> temps);
     }
 
     @GET
