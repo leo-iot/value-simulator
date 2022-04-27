@@ -32,7 +32,7 @@ public class MyValueGenerator {
     private List<Double> goodTemps = new LinkedList<>();
 
     public void roomData(Room room){
-        subscriptions.put(room.getName(), Observable.interval(0, 10, TimeUnit.SECONDS)
+        subscriptions.put(room.getName(), Observable.interval(0, 5, TimeUnit.SECONDS)
                 .subscribe(value -> {
                     Map values = new HashMap<String, Object>();
                     values.put("temp", System.currentTimeMillis());
