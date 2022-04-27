@@ -48,14 +48,16 @@ public class MyValueGenerator {
                     JSONObject jsonValue = new JSONObject(values);
 
                     long timeStamp = jsonValue.getLong("temp");
-                    emitter.send(MqttMessage.of("values/" + room.getName() + "/" + "noise" + "/" + "state", getBytes(jsonValue.getDouble("noise"), timeStamp)));
-                    emitter.send(MqttMessage.of("values/" + room.getName() + "/" + "trafficlight" + "/" + "state", getBytes(jsonValue.getDouble("trafficlight"), timeStamp)));
-                    emitter.send(MqttMessage.of("values/" + room.getName() + "/" + "temperature" + "/" + "state", getBytes(jsonValue.getDouble("temperature"), timeStamp)));
-                    emitter.send(MqttMessage.of("values/" + room.getName() + "/" + "humidity" + "/" + "state", getBytes(jsonValue.getDouble("humidity"), timeStamp)));
-                    emitter.send(MqttMessage.of("values/" + room.getName() + "/" + "pressure" + "/" + "state", getBytes(jsonValue.getDouble("pressure"), timeStamp)));
-                    emitter.send(MqttMessage.of("values/" + room.getName() + "/" + "luminosity" + "/" + "state", getBytes(jsonValue.getDouble("luminosity"), timeStamp)));
-                    emitter.send(MqttMessage.of("values/" + room.getName() + "/" + "co2" + "/" + "state", getBytes(jsonValue.getDouble("co2"), timeStamp)));
-                    emitter.send(MqttMessage.of("values/" + room.getName() + "/" + "motion" + "/" + "state", getBytes(jsonValue.getDouble("motion"), timeStamp)));
+                    String topicPath = "";
+                    String stateStr = "/state";
+                    emitter.send(MqttMessage.of(topicPath + room.getPath() + "/" + "noise" + stateStr, getBytes(jsonValue.getDouble("noise"), timeStamp)));
+                    emitter.send(MqttMessage.of(topicPath + room.getPath() + "/" + "trafficlight" + stateStr, getBytes(jsonValue.getDouble("trafficlight"), timeStamp)));
+                    emitter.send(MqttMessage.of(topicPath + room.getPath() + "/" + "temperature" + stateStr, getBytes(jsonValue.getDouble("temperature"), timeStamp)));
+                    emitter.send(MqttMessage.of(topicPath + room.getPath() + "/" + "humidity" + stateStr, getBytes(jsonValue.getDouble("humidity"), timeStamp)));
+                    emitter.send(MqttMessage.of(topicPath + room.getPath() + "/" + "pressure" + stateStr, getBytes(jsonValue.getDouble("pressure"), timeStamp)));
+                    emitter.send(MqttMessage.of(topicPath + room.getPath() + "/" + "luminosity" + stateStr, getBytes(jsonValue.getDouble("luminosity"), timeStamp)));
+                    emitter.send(MqttMessage.of(topicPath + room.getPath() + "/" + "co2" + stateStr, getBytes(jsonValue.getDouble("co2"), timeStamp)));
+                    emitter.send(MqttMessage.of(topicPath + room.getPath() + "/" + "motion" + stateStr, getBytes(jsonValue.getDouble("motion"), timeStamp)));
 
                     System.out.println("Sending value -> " + jsonValue);
                 }));

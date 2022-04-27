@@ -13,8 +13,8 @@ public class RoomRepository
     @Inject
     MyValueGenerator myValueGenerator;
 
-    public boolean addRoom(String roomName) {
-        Room currRoom = new Room(roomName);
+    public boolean addRoom(String roomName, String floor) {
+        Room currRoom = new Room(roomName, floor);
         if(myValueGenerator.subscriptions.containsKey(roomName))
         {
             System.out.println("Room already exists");
@@ -38,7 +38,7 @@ public class RoomRepository
         if(!myValueGenerator.subscriptions.containsKey(roomName))
         {
             deleteRoom(roomName);
-            addRoom(newName);
+            //addRoom(newName);
             return true;
         }
         System.out.println("Room doesnt exist");

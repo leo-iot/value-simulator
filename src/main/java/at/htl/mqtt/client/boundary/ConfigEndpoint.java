@@ -1,8 +1,8 @@
 package at.htl.mqtt.client.boundary;
 
+import at.htl.mqtt.client.dto.RoomsDTO;
 import at.htl.mqtt.client.repository.RoomRepository;
 import io.quarkus.qute.CheckedTemplate;
-import io.quarkus.qute.Template;
 import io.quarkus.qute.TemplateInstance;
 
 import javax.enterprise.context.RequestScoped;
@@ -32,11 +32,11 @@ public class ConfigEndpoint {
     }
 
     @POST
-    @Path("addRoom/{roomName}")
+    @Path("addRoom/{floor}/{roomName}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addRoom(@PathParam("roomName") String roomName) {
-        boolean success = roomRepo.addRoom(roomName);
+    public Response addRoom(@PathParam("roomName") String roomName, @PathParam("floor") String floor) {
+        boolean success = roomRepo.addRoom(roomName, floor);
 
         if (success){
             return Response.status(201).build();
