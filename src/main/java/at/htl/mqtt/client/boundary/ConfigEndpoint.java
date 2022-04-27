@@ -45,6 +45,15 @@ public class ConfigEndpoint {
         return Response.status(400).build();
     }
 
+    @POST
+    @Path("addMultipleRooms")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addMultipleRooms(RoomsDTO rooms){
+        roomRepo.addMultipleRooms(rooms);
+        return Response.status(400).build();
+    }
+
     @DELETE
     @Path("deleteRoom/{roomName}")
     @Consumes(MediaType.APPLICATION_JSON)

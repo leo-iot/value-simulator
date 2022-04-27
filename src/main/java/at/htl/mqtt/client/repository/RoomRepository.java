@@ -1,10 +1,12 @@
 package at.htl.mqtt.client.repository;
 
 import at.htl.mqtt.client.boundary.MyValueGenerator;
+import at.htl.mqtt.client.dto.RoomsDTO;
 import at.htl.mqtt.client.entity.Room;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 @ApplicationScoped
@@ -43,5 +45,19 @@ public class RoomRepository
         }
         System.out.println("Room doesnt exist");
         return false;
+    }
+
+    public void addMultipleRooms(RoomsDTO rooms) {
+        addFloor(rooms.og2,"og2");
+        addFloor(rooms.og,"og");
+        addFloor(rooms.eg,"eg");
+        addFloor(rooms.ug,"ug");
+    }
+
+    private void addFloor(ArrayList<String> rooms, String floor){
+        for (var room :
+                rooms) {
+            addRoom(room, floor);
+        }
     }
 }
