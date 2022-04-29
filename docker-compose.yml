@@ -7,5 +7,14 @@ services:
       - POSTGRES_USER=app
       - POSTGRES_PASSWORD=app
       - POSTGRES_DB=db
+    volumes:
+      - ./data/:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+  value-simulator:
+    depends_on: [postgres-db]
+    image: ghcr.io/leo-iot/leo-iot-server/app
+    build: .
+    container_name: value-simulator
+    ports:
+      - "8080:8080"
