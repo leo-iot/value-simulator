@@ -30,7 +30,8 @@ public class RoomRessource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addRoom(RoomDTO roomDTO){
-        return Response.ok(Room.getEntityManager().merge(new Room(roomDTO))).build();
+        Room r = roomRepo.addRoom(new Room(roomDTO));
+        return Response.ok(r).build();
     }
 
     @DELETE

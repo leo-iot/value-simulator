@@ -25,18 +25,19 @@ public class RoomRepository
     public void addFloor(ArrayList<String> rooms, String floor){
         for (var room :
                 rooms) {
-            Room.persist(new Room(room, floor));
             addRoom(new Room(room, floor));
         }
     }
 
     @Transactional
-    public void addRoom(Room room){
+    public Room addRoom(Room room){
         var vts = ValueType.listAll();
         for (var vt : vts) {
             Value v = new Value(room, (ValueType) vt);
             v.setRoom(room);
             v.setValueType((ValueType) vt);
+            Value.persist(v);
         }
+        return Room.getEntityManager().merge(room);
     }
 }
