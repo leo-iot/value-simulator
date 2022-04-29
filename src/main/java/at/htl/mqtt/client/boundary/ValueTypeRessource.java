@@ -2,7 +2,10 @@ package at.htl.mqtt.client.boundary;
 
 import at.htl.mqtt.client.dto.ValueTypeDTO;
 import at.htl.mqtt.client.dto.ValueTypesDTO;
+import at.htl.mqtt.client.entity.Room;
+import at.htl.mqtt.client.entity.Value;
 import at.htl.mqtt.client.entity.ValueType;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
@@ -23,7 +26,15 @@ public class ValueTypeRessource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addValueType(ValueTypeDTO valueTypeDTO){
-        return Response.ok(ValueType.getEntityManager().merge(new ValueType(valueTypeDTO))).build();
+        ValueType vt = new ValueType(valueTypeDTO);
+        ValueType.persist(vt);
+
+        for (var r : Room.listAll()) {
+            Value v = new Value((Room) r, vt);
+            Value.persist(v);
+        }
+
+        return Response.ok(vt).build();
     }
 
     @POST
@@ -34,7 +45,7 @@ public class ValueTypeRessource {
     public Response addMultipleValueTypes(ValueTypesDTO valueTypesDTO){
 
         for (ValueTypeDTO valueTypeDTO : valueTypesDTO.valueTypeDTOS) {
-            ValueType.getEntityManager().merge(new ValueType(valueTypeDTO));
+            addValueType(valueTypeDTO);
         }
 
         return Response.status(200).build();
