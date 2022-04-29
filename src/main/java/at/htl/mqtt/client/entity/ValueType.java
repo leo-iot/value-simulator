@@ -8,25 +8,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Room extends PanacheEntityBase {
+public class ValueType extends PanacheEntityBase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
-    private String floor;
+    private int minValue;
+    private int maxValue;
 
     @JsonbTransient
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "valueType")
     private List<Value> values = new ArrayList<>();
 
-    public Room(String name, String floor) {
+    public ValueType(String name, int minValue, int maxValue) {
         this.name = name;
-        this.floor = floor;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
     }
 
-    public Room() {
+    public ValueType() {
+    }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -37,20 +47,20 @@ public class Room extends PanacheEntityBase {
         this.name = name;
     }
 
-    public String getFloor() {
-        return floor;
+    public int getMinValue() {
+        return minValue;
     }
 
-    public void setFloor(String floor) {
-        this.floor = floor;
+    public void setMinValue(int minValue) {
+        this.minValue = minValue;
     }
 
-    public Long getId() {
-        return id;
+    public int getMaxValue() {
+        return maxValue;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setMaxValue(int maxValue) {
+        this.maxValue = maxValue;
     }
 
     public List<Value> getValues() {
@@ -62,15 +72,6 @@ public class Room extends PanacheEntityBase {
     }
 
     public void addValue(Value value) {
-        this.values.add(value);
-    }
-
-    public String getPath() {
-        return floor + "/" + name;
-    }
-
-    @Override
-    public String toString() {
-        return getName();
+        values.add(value);
     }
 }
