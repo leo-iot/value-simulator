@@ -11,6 +11,8 @@ public class Value extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private double lastValue = 0;
+
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private Room room;
@@ -51,5 +53,13 @@ public class Value extends PanacheEntityBase {
 
     public void setValueType(ValueType valueType) {
         this.valueType = valueType;
+    }
+
+    public double getLastValue() {
+        return lastValue;
+    }
+
+    public void setLastValue(double lastValue) {
+        this.lastValue = lastValue;
     }
 }
