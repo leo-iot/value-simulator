@@ -1,5 +1,6 @@
 package at.htl.mqtt.client.entity;
 
+import at.htl.mqtt.client.dto.RoomDTO;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.json.bind.annotation.JsonbTransient;
@@ -23,6 +24,11 @@ public class Room extends PanacheEntityBase {
     public Room(String name, String floor) {
         this.name = name;
         this.floor = floor;
+    }
+
+    public Room(RoomDTO roomDTO) {
+        this.name = roomDTO.name;
+        this.floor = roomDTO.floor;
     }
 
     public Room() {
@@ -65,7 +71,7 @@ public class Room extends PanacheEntityBase {
         this.values.add(value);
     }
 
-    public String getPath() {
+    public String mqttPath() {
         return floor + "/" + name;
     }
 
