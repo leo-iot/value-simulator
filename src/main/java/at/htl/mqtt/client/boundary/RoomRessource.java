@@ -68,7 +68,7 @@ public class RoomRessource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addMultipleRooms(RoomsDTO rooms){
         roomRepo.addMultipleRooms(rooms);
-        return Response.status(400).build();
+        return Response.status(200).build();
     }
 
 

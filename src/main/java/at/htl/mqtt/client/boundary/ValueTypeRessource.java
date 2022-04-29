@@ -1,6 +1,7 @@
 package at.htl.mqtt.client.boundary;
 
 import at.htl.mqtt.client.dto.ValueTypeDTO;
+import at.htl.mqtt.client.dto.ValueTypesDTO;
 import at.htl.mqtt.client.entity.ValueType;
 
 import javax.transaction.Transactional;
@@ -23,6 +24,20 @@ public class ValueTypeRessource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response addValueType(ValueTypeDTO valueTypeDTO){
         return Response.ok(ValueType.getEntityManager().merge(new ValueType(valueTypeDTO))).build();
+    }
+
+    @POST
+    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("addMultipleValueTypes")
+    public Response addMultipleValueTypes(ValueTypesDTO valueTypesDTO){
+
+        for (ValueTypeDTO valueTypeDTO : valueTypesDTO.valueTypeDTOS) {
+            ValueType.getEntityManager().merge(new ValueType(valueTypeDTO));
+        }
+
+        return Response.status(200).build();
     }
 
     @DELETE

@@ -11,15 +11,15 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @ApplicationScoped
 public class RoomRepository
 {
     public void addMultipleRooms(RoomsDTO rooms) {
-        addFloor(rooms.og2,"og2");
-        addFloor(rooms.og,"og");
-        addFloor(rooms.eg,"eg");
-        addFloor(rooms.ug,"ug");
+        for(Map.Entry<String, List<String>> entry : rooms.floors.entrySet()){
+            addFloor((ArrayList<String>) entry.getValue(), entry.getKey());
+        }
     }
 
     public void addFloor(ArrayList<String> rooms, String floor){
