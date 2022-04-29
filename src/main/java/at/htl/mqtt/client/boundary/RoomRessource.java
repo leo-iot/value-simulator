@@ -69,4 +69,6 @@ public class RoomRessource {
         roomRepo.addMultipleRooms(rooms);
         return Response.status(400).build();
     }
+
+
 }
