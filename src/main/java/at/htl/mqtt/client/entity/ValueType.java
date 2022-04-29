@@ -1,5 +1,6 @@
 package at.htl.mqtt.client.entity;
 
+import at.htl.mqtt.client.dto.ValueTypeDTO;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import javax.json.bind.annotation.JsonbTransient;
@@ -19,13 +20,19 @@ public class ValueType extends PanacheEntityBase {
     private int maxValue;
 
     @JsonbTransient
-    @OneToMany(mappedBy = "valueType")
+    @OneToMany(mappedBy = "valueType", cascade = CascadeType.ALL)
     private List<Value> values = new ArrayList<>();
 
     public ValueType(String name, int minValue, int maxValue) {
         this.name = name;
         this.minValue = minValue;
         this.maxValue = maxValue;
+    }
+
+    public ValueType(ValueTypeDTO valueTypeDTO) {
+        this.name = valueTypeDTO.name;
+        this.minValue = valueTypeDTO.minValue;
+        this.maxValue = valueTypeDTO.maxValue;
     }
 
     public ValueType() {
