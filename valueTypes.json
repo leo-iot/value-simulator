@@ -1,0 +1,44 @@
+{
+  "valueTypeDTOS": [
+    {
+      "name": "noise",
+      "minValue": 0,
+      "maxValue": 0
+    },
+    {
+      "name": "trafficlight",
+      "minValue": 0,
+      "maxValue": 0
+    },
+    {
+      "name": "motion",
+      "minValue": 0,
+      "maxValue": 0
+    },
+    {
+      "name": "temperature",
+      "minValue": 0,
+      "maxValue": 0
+    },
+    {
+      "name": "humidity",
+      "minValue": 0,
+      "maxValue": 0
+    },
+    {
+      "name": "pressure",
+      "minValue": 0,
+      "maxValue": 0
+    },
+    {
+      "name": "luminosity",
+      "minValue": 0,
+      "maxValue": 0
+    },
+    {
+      "name": "co2",
+      "minValue": 0,
+      "maxValue": 0
+    }
+  ]
+}

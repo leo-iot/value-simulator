@@ -7,6 +7,7 @@ import io.quarkus.scheduler.Scheduled;
 import io.smallrye.reactive.messaging.mqtt.MqttMessage;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.eclipse.microprofile.reactive.messaging.OnOverflow;
 import org.json.JSONObject;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -22,6 +23,7 @@ public class ValueGenerator {
 
     @Inject
     @Channel("topic-values")
+    @OnOverflow(value = OnOverflow.Strategy.BUFFER, bufferSize = 1000)
     Emitter<byte[]> emitter;
 
     private List<Double> goodTemps = new LinkedList<>();
