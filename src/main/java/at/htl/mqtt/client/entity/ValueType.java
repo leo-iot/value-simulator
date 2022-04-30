@@ -18,21 +18,27 @@ public class ValueType extends PanacheEntityBase {
     private String name;
     private int minValue;
     private int maxValue;
+    private boolean onlyInteger;
+    private int multiplier;
 
     @JsonbTransient
     @OneToMany(mappedBy = "valueType", cascade = CascadeType.ALL)
     private List<Value> values = new ArrayList<>();
 
-    public ValueType(String name, int minValue, int maxValue) {
+    public ValueType(String name, int minValue, int maxValue, boolean onlyInteger, int multiplier) {
         this.name = name;
         this.minValue = minValue;
         this.maxValue = maxValue;
+        this.onlyInteger = onlyInteger;
+        this.multiplier = multiplier;
     }
 
     public ValueType(ValueTypeDTO valueTypeDTO) {
         this.name = valueTypeDTO.name;
         this.minValue = valueTypeDTO.minValue;
         this.maxValue = valueTypeDTO.maxValue;
+        this.onlyInteger = valueTypeDTO.onlyInteger;
+        this.multiplier = valueTypeDTO.multiplier;
     }
 
     public ValueType() {
@@ -80,5 +86,21 @@ public class ValueType extends PanacheEntityBase {
 
     public void addValue(Value value) {
         values.add(value);
+    }
+
+    public boolean isOnlyInteger() {
+        return onlyInteger;
+    }
+
+    public void setOnlyInteger(boolean onlyInteger) {
+        this.onlyInteger = onlyInteger;
+    }
+
+    public int getMultiplier() {
+        return multiplier;
+    }
+
+    public void setMultiplier(int multiplier) {
+        this.multiplier = multiplier;
     }
 }

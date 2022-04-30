@@ -57,25 +57,35 @@ public class ValueGenerator {
     }
 
     public Object getValue(Value value) {
-        ValueType vt = value.getValueType();
-        switch (vt.getName()){
-            case "noise":
-                return Math.random() * 100;
-            case "trafficlight":
-            case "motion":
-                return Math.floor(Math.random());
-            case "temperature":
-                return goodTemp();
-            case "humidity":
-                return Math.random() * 20;
-            case "pressure":
-                return  Math.random() * 1000;
-            case "luminosity":
-                return Math.random() * 2000;
-            case "co2":
-                return Math.random() * 700;
+        return newRandomValue(value);
+    }
+
+    @Transactional
+    private double newRandomValue(Value value){
+        double r = Math.random() * value.getValueType().getMultiplier();
+        double newVal = value.getLastValue();
+
+        if(newVal == 0){
+            newVal = (double) (value.getValueType().getMinValue() + value.getValueType().getMaxValue()) / 2;
         }
-        return 0;
+
+        if(Math.round(Math.random())==0){
+            newVal += r;
+        }
+        else {
+            newVal -= r;
+        }
+
+        if(newVal > value.getValueType().getMaxValue() || newVal < value.getValueType().getMinValue()){
+            newVal = newRandomValue(value);
+        }
+        value.setLastValue(newVal);
+        if(value.getValueType().isOnlyInteger()){
+            return Math.round(newVal);
+        }
+        else{
+            return newVal;
+        }
     }
 
     public byte[] getBytes(Object value, long timeStamp) {

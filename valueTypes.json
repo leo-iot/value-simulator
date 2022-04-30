@@ -1,44 +1,60 @@
 {
   "valueTypeDTOS": [
     {
+      "name": "volume",
+      "minValue": 50,
+      "maxValue": 100,
+      "onlyInteger": true,
+      "multiplier": 10
+    },
+    {
       "name": "noise",
-      "minValue": 0,
-      "maxValue": 0
+      "minValue": 100,
+      "maxValue": 700,
+      "onlyInteger": true,
+      "multiplier": 10
     },
     {
       "name": "trafficlight",
       "minValue": 0,
-      "maxValue": 0
+      "maxValue": 1,
+      "onlyInteger": true,
+      "multiplier": 1
     },
     {
       "name": "motion",
       "minValue": 0,
-      "maxValue": 0
+      "maxValue": 1,
+      "onlyInteger": true,
+      "multiplier": 1
     },
     {
       "name": "temperature",
-      "minValue": 0,
-      "maxValue": 0
+      "minValue": 15,
+      "maxValue": 25,
+      "onlyInteger": false,
+      "multiplier": 1
     },
     {
       "name": "humidity",
       "minValue": 0,
-      "maxValue": 0
-    },
-    {
-      "name": "pressure",
-      "minValue": 0,
-      "maxValue": 0
+      "maxValue": 80,
+      "onlyInteger": true,
+      "multiplier": 1
     },
     {
       "name": "luminosity",
-      "minValue": 0,
-      "maxValue": 0
+      "minValue": 10,
+      "maxValue": 2000,
+      "onlyInteger": true,
+      "multiplier": 10
     },
     {
       "name": "co2",
-      "minValue": 0,
-      "maxValue": 0
+      "minValue": 500,
+      "maxValue": 800,
+      "onlyInteger": true,
+      "multiplier": 10
     }
   ]
 }
