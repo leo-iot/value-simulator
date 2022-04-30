@@ -72,7 +72,7 @@ public class Room extends PanacheEntityBase {
     }
 
     public String mqttPath() {
-        return floor + "/" + name;
+        return (floor + "/" + name).toLowerCase();
     }
 
     @Override
