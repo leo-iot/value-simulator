@@ -31,6 +31,10 @@ public class RoomRepository
 
     @Transactional
     public Room addRoom(Room room){
+        if(Room.find("select r from Room r where r.name = ?1 and r.floor = ?2", room.getName(), room.getFloor()).firstResult() != null){
+            return room;
+        }
+
         var vts = ValueType.listAll();
         for (var vt : vts) {
             Value v = new Value(room, (ValueType) vt);
