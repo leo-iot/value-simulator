@@ -5,8 +5,6 @@ import at.htl.mqtt.client.entity.Room;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
-import java.util.LinkedList;
 import java.util.List;
 
 @ApplicationScoped
@@ -25,6 +23,10 @@ public class RoomRepository
 
         myValueGenerator.roomData(currRoom);
         return true;
+    }
+
+    public List<Double> getCurrTemp(){
+        return myValueGenerator.getGoodTemps();
     }
 
     public boolean deleteRoom(String roomName) {

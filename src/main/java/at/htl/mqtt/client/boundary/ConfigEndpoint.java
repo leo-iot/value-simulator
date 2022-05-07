@@ -1,17 +1,35 @@
 package at.htl.mqtt.client.boundary;
 
 import at.htl.mqtt.client.repository.RoomRepository;
+import io.quarkus.qute.CheckedTemplate;
+import io.quarkus.qute.Template;
+import io.quarkus.qute.TemplateInstance;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
+ @RequestScoped
 @Path("/api")
 public class ConfigEndpoint {
 
     @Inject
     RoomRepository roomRepo;
+
+    @CheckedTemplate
+    public static class Templates {
+        public static native TemplateInstance temperatures(List<Double> temps);
+    }
+
+    @GET
+    @Path("temperature")
+    @Produces(MediaType.TEXT_HTML)
+    public TemplateInstance get() {
+        return Templates.temperatures(roomRepo.getCurrTemp());
+    }
 
     @POST
     @Path("addRoom/{roomName}")
@@ -27,7 +45,7 @@ public class ConfigEndpoint {
         return Response.status(400).build();
     }
 
-    @POST
+    @DELETE
     @Path("deleteRoom/{roomName}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -54,4 +72,6 @@ public class ConfigEndpoint {
 
         return Response.status(400).build();
     }
+
+
 }

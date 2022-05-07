@@ -9,10 +9,12 @@ import org.eclipse.microprofile.reactive.messaging.Emitter;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.DateTime;
 
 /**
  * https://stackoverflow.com/questions/62883516/publish-subscribe-mqtt-using-smallrye-reactive-messaging-dynamically
@@ -27,14 +29,16 @@ public class MyValueGenerator {
 
     public HashMap<String, Disposable> subscriptions = new HashMap<>();
 
+    private List<Double> goodTemps = new LinkedList<>();
+
     public void roomData(Room room){
-        subscriptions.put(room.getName(), Observable.interval(0, 6, TimeUnit.SECONDS)
+        subscriptions.put(room.getName(), Observable.interval(0, 10, TimeUnit.SECONDS)
                 .subscribe(value -> {
                     Map values = new HashMap<String, Object>();
                     values.put("temp", System.currentTimeMillis());
                     values.put("noise", Math.random() * 100);
                     values.put("trafficlight", Math.floor(Math.random()));
-                    values.put("temperature", temperatureValue());
+                    values.put("temperature", goodTemp());
                     values.put("humidity", Math.random() * 20);
                     values.put("pressure", Math.random() * 1000);
                     values.put("luminosity", Math.random() * 2000);
@@ -89,6 +93,32 @@ public class MyValueGenerator {
            }
        }
        return returnValue;
+    }
+
+    public List<Double> getGoodTemps(){
+        return goodTemps;
+    }
+
+    public double goodTemp()
+    {
+        double hours = LocalDateTime.now().getHour()+((LocalDateTime.now().getMinute()/60.00*100.00)/100.00);
+        //return (-0.01 * Math.pow(hours,3) + 0.2 * Math.pow(hours,2) + 10)+10;
+
+        double sum1 = -0.014 * Math.pow(hours,3);
+        double sum2 = 0.4 * Math.pow(hours,2);
+        double sum3 = -1.8 * hours + 11;
+
+        //System.out.println(sum1);
+        //System.out.println(sum2);
+        //System.out.println(sum3);
+        //System.out.println(hours);
+        //System.out.println(LocalDateTime.now().getMinute());
+
+        double sum = sum1+sum2+sum3;
+
+        goodTemps.add(sum);
+
+        return  sum1+ sum2 + sum3;
     }
 
     public byte[] getBytes(Object value, long timeStamp) {
