@@ -61,7 +61,6 @@ public class ValueGenerator {
         return newRandomValue(value);
     }
 
-    @Transactional
     private double newRandomValue(Value value){
         double r = Math.random() * value.getValueType().getMultiplier();
         double newVal = value.getLastValue();
