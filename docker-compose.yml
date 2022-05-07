@@ -11,9 +11,9 @@ services:
       - ./data/:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-  value-simulator:
+  leo-iot-value-simulator:
     depends_on: [postgres-db]
-    image: ghcr.io/leo-iot/leo-iot-server/app
+    image: ghcr.io/leo-iot/leo-iot-value-simulator
     build: .
     container_name: value-simulator
     ports:
