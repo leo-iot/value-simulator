@@ -15,7 +15,6 @@ services:
     depends_on: [postgres-db]
     restart: on-failure
     image: ghcr.io/leo-iot/leo-iot-value-simulator
-    build: .
     container_name: value-simulator
     ports:
       - "80:8080"
