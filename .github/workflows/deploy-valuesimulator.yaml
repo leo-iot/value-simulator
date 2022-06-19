@@ -5,27 +5,31 @@ on:
       - main
 jobs:
   package-value-simulator:
-    name: Package Value-Simulator
+    name: Build and Push
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: .
     env:
-      IMAGE_NAME: leoiot-value-simulator
+      IMAGE_NAME: leo-iot-value-simulator
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
-      - name: Package
-        run: mvn package -Dmaven.test.skip
       - name: Login to GitHub Packages
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build image
-        run: docker build . -f src/main/docker/Dockerfile.jvm --tag $IMAGE_NAME
-      - name: Push image
+      - name: Build
+        run: docker build . --tag $IMAGE_NAME
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+      - name: Push
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
@@ -48,10 +52,16 @@ jobs:
           ssh-private-key: ${{ secrets.DEPLOYMENT_VALUESIM_PRIVKEY }}
       - name: create .ssh/known_hosts
         run: ssh-keyscan -H -t rsa -v vm09.htl-leonding.ac.at  >> ~/.ssh/known_hosts
+      - name: Copy required files
+        run: |
+          scp -r docker-compose.yml iotadmin@vm09.htl-leonding.ac.at:/opt/docker/leo-iot
       - name: Run Docker Container
         run: |
           ssh iotadmin@vm09.htl-leonding.ac.at "
-          cd leo-iot
-          sudo docker-compose down
+          cd /opt/docker/leo-iot
+          echo ${{ github.token }} | docker login https://docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          sudo docker-compose pull
+          sudo docker-compose stop
+          sudo docker-compose rm -f
           sudo docker-compose up -d
           "
