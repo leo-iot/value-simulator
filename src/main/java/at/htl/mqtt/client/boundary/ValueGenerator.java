@@ -29,11 +29,16 @@ public class ValueGenerator {
 
     private List<Double> goodTemps = new LinkedList<>();
 
-    @Scheduled(every = "2s")
+    @Scheduled(every = "20s")
     void sendValues() {
         var rooms = Room.listAll();
         for (var room : rooms) {
             sendValueForRoom((Room) room);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
