@@ -9,3 +9,20 @@ POST http://{{url}}/api/valueType/addMultipleValueTypes
 Content-Type: application/json
 
 < ./valueTypes.json
+
+
+### Disable SendingValues
+POST http://{{url}}/api/config
+Content-Type: application/json
+
+{
+  "sendValues": false
+}
+
+### Enable SendingValues
+POST http://{{url}}/api/config
+Content-Type: application/json
+
+{
+  "sendValues": true
+}
