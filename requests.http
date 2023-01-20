@@ -1,18 +1,18 @@
 ### Post all rooms
-POST http://{{url}}/api/room/addMultipleRooms
+POST {{url}}/api/room/addMultipleRooms
 Content-Type: application/json
 
 < ./rooms.json
 
 ### Post all sensorTypes
-POST http://{{url}}/api/valueType/addMultipleValueTypes
+POST {{url}}/api/valueType/addMultipleValueTypes
 Content-Type: application/json
 
 < ./valueTypes.json
 
 
 ### Disable SendingValues
-POST http://{{url}}/api/config
+POST {{url}}/api/config
 Content-Type: application/json
 
 {
@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 ### Enable SendingValues
-POST http://{{url}}/api/config
+POST {{url}}/api/config
 Content-Type: application/json
 
 {

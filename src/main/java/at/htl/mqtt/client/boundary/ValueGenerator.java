@@ -30,7 +30,7 @@ public class ValueGenerator {
 
     private List<Double> goodTemps = new LinkedList<>();
 
-    @Scheduled(every = "100s")
+    @Scheduled(every = "200s")
     void sendValues() {
         if(!checkSendingValues()){
             System.out.println("Not Sending Values");
@@ -41,7 +41,7 @@ public class ValueGenerator {
         for (var room : rooms) {
             sendValueForRoom((Room) room);
             try {
-                Thread.sleep(100);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
