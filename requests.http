@@ -26,3 +26,9 @@ Content-Type: application/json
 {
   "sendValues": true
 }
+
+### Get all Rooms
+GET {{url}}/api/room
+
+### Delete Room
+DELETE {{url}}/api/room/105

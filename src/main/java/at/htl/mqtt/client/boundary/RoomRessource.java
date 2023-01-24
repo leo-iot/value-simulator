@@ -4,6 +4,7 @@ import at.htl.mqtt.client.dto.RoomDTO;
 import at.htl.mqtt.client.dto.RoomsDTO;
 import at.htl.mqtt.client.dto.ValueTypeDTO;
 import at.htl.mqtt.client.entity.Room;
+import at.htl.mqtt.client.entity.Value;
 import at.htl.mqtt.client.entity.ValueType;
 import at.htl.mqtt.client.repository.RoomRepository;
 
@@ -41,6 +42,7 @@ public class RoomRessource {
     @Path("/{id}")
     public Response deleteRoom(@PathParam("id") Long id){
         Room r = Room.findById(id);
+        Value.delete("room_id", id);
         Room.deleteById(id);
         return Response.ok(r).build();
     }
