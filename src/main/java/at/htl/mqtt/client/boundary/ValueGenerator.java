@@ -1,5 +1,6 @@
 package at.htl.mqtt.client.boundary;
 
+import at.htl.mqtt.client.entity.Config;
 import at.htl.mqtt.client.entity.Room;
 import at.htl.mqtt.client.entity.Value;
 import at.htl.mqtt.client.entity.ValueType;
@@ -29,12 +30,29 @@ public class ValueGenerator {
 
     private List<Double> goodTemps = new LinkedList<>();
 
-    @Scheduled(every = "2s")
+    @Scheduled(every = "200s")
     void sendValues() {
+        if(!checkSendingValues()){
+            System.out.println("Not Sending Values");
+            return;
+        }
+        System.out.println("Sending Values");
         var rooms = Room.listAll();
         for (var room : rooms) {
             sendValueForRoom((Room) room);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
+    }
+
+    private boolean checkSendingValues() {
+        List<Config> c = Config.listAll();
+        if(c.size() == 0)
+            return true;
+        return c.get(0).sendValues;
     }
 
     private void sendValueForRoom(Room room) {
