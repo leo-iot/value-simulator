@@ -31,4 +31,4 @@ Content-Type: application/json
 GET {{url}}/api/room
 
 ### Delete Room
-DELETE {{url}}/api/room/105
+DELETE {{url}}/api/room/133

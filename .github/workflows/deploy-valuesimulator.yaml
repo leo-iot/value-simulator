@@ -11,7 +11,7 @@ jobs:
       run:
         working-directory: .
     env:
-      IMAGE_NAME: leo-iot-value-simulator
+      IMAGE_NAME: leo-iot-value-sim-k8s/app
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
@@ -39,29 +39,29 @@ jobs:
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
-  start:
-    name: Start Container
-    needs: [package-value-simulator]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: install ssh key
-        uses: webfactory/ssh-agent@v0.4.1
-        with:
-          ssh-private-key: ${{ secrets.DEPLOYMENT_VALUESIM_PRIVKEY }}
-      - name: create .ssh/known_hosts
-        run: ssh-keyscan -H -t rsa -v vm09.htl-leonding.ac.at  >> ~/.ssh/known_hosts
-      - name: Copy required files
-        run: |
-          scp -r docker-compose.yml iotadmin@vm09.htl-leonding.ac.at:/opt/docker/leo-iot
-      - name: Run Docker Container
-        run: |
-          ssh iotadmin@vm09.htl-leonding.ac.at "
-          cd /opt/docker/leo-iot
-          echo ${{ github.token }} | docker login https://docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-          sudo docker-compose pull
-          sudo docker-compose stop
-          sudo docker-compose rm -f
-          sudo docker-compose up -d
-          "
+#  start:
+#    name: Start Container
+#    needs: [package-value-simulator]
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v1
+#      - name: install ssh key
+#        uses: webfactory/ssh-agent@v0.4.1
+#        with:
+#          ssh-private-key: ${{ secrets.DEPLOYMENT_VALUESIM_PRIVKEY }}
+#      - name: create .ssh/known_hosts
+#        run: ssh-keyscan -H -t rsa -v vm09.htl-leonding.ac.at  >> ~/.ssh/known_hosts
+#      - name: Copy required files
+#        run: |
+#          scp -r docker-compose.yml iotadmin@vm09.htl-leonding.ac.at:/opt/docker/leo-iot
+#      - name: Run Docker Container
+#        run: |
+#          ssh iotadmin@vm09.htl-leonding.ac.at "
+#          cd /opt/docker/leo-iot
+#          echo ${{ github.token }} | docker login https://docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+#          sudo docker-compose pull
+#          sudo docker-compose stop
+#          sudo docker-compose rm -f
+#          sudo docker-compose up -d
+#          "
