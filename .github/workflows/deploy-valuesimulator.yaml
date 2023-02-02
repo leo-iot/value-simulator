@@ -11,7 +11,7 @@ jobs:
       run:
         working-directory: .
     env:
-      IMAGE_NAME: leo-iot-value-sim-k8s/app
+      IMAGE_NAME: leo-iot-value-sim-k8s-secure/app
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
