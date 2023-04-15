@@ -2,44 +2,240 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Value Simulator</title>
+
+    <style>
+        body {
+            font-family: "Fira Code";
+        }
+
+        ul {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            font-family: "Fira Code";
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border-radius: 40px 10px 10px 40px;
+            background-color: #333;
+        }
+
+        li {
+            float: left;
+        }
+
+        li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        li a:hover:not(.logo) {
+            background-color: #ffffff;
+            color: #0d1c2c;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 0 2px 2px #c2c2c2;
+        }
+
+        .logo {
+            background-color: #ff9800;
+            border-radius: 40px;
+            font-size: 20px;
+            box-shadow: 0 0 5px 5px antiquewhite;
+            padding-right: 20px;
+            margin-right: 20px;
+        }
+
+        .content {
+            padding-left: 40px;
+        }
+
+        h1 {
+            font-family: "Fira Code";
+            padding-top: 100px;
+        }
+
+        :target h1 {
+            color: #ff9800;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+            padding: 20px;
+            width: 40%;
+            border-radius: 5px;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #DDD;
+        }
+
+        tr:hover {
+            background-color: #ffbd55;
+        }
+
+        .toTopButtonContainer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+        }
+        .toTopButton {
+            background: #ff9800;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px 5px antiquewhite;
+            color: white;
+            cursor: default;
+            text-decoration: none;
+        }
+        .toTopButton:hover{
+            box-shadow: 0 0 5px 5px #6e6e6e;
+            transition: 0.5s;
+            cursor: pointer;
+        }
+    </style>
+
 </head>
 <body>
-    <div>
-        <canvas id="myChart"></canvas>
+<div id="top">
+    <ul>
+        <li><a class="logo">Value-Simulator</a></li>
+        <li><a href="#visualization">Visualization ({temps.length})</a></li>
+        <li><a href="#configuration">Configuration ({config.size})</a></li>
+        <li><a href="#rooms">Rooms ({rooms.size()})</a></li>
+        <li><a href="#types">Types ({types.size()})</a></li>
+    </ul>
+</div>
+
+<div class="toTopButtonContainer">
+    <a class="toTopButton" href="#top">go up</a>
+</div>
+
+<div class="content">
+    <div id="visualization">
+        <h1>&lt;Visualization/&gt;</h1>
+        <div class="card">
+            <canvas id="myChart"></canvas>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const labels = {temps};
 
-        const data = {
-            labels: labels,
-            datasets: [{
-                label: 'Temperature Simulator Values',
-                backgroundColor: 'rgb(99,156,255)',
-                borderColor: 'rgb(99,255,193)',
-                data: {temps},
-            }]
-        };
+    <div id="configuration">
+        <h1>&lt;Configuration/&gt;</h1>
 
-        const config = {
-            type: 'line',
-            data: data,
-            options: {
-                scales: {
-                    x: {
-                        display: false // Hide X axis labels
-                    }
+        <div class="card">
+            <table>
+                <tr>
+                    <th>sendValues</th>
+                </tr>
+
+                {#for element in config}
+                    <tr>
+                    <td>{element.sendValues}</td>
+                    </tr>
+                {/for}
+
+            </table>
+        </div>
+    </div>
+
+    <div id="rooms">
+        <h1>&lt;Rooms/&gt;</h1>
+
+        <div class="card">
+            <table>
+                <tr>
+                    <th>Room</th>
+                    <th>Floor</th>
+                </tr>
+
+                {#for element in rooms}
+                    <tr>
+                    <td>{element.name}</td>
+                    <td>{element.floor}</td>
+                    </tr>
+                {/for}
+
+            </table>
+        </div>
+    </div>
+
+
+    <div id="types">
+        <h1>&lt;Value Types/&gt;</h1>
+        <div class="card">
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Min.</th>
+                    <th>Max.</th>
+                    <th>Only Integer</th>
+                    <th>Multiplier</th>
+                </tr>
+
+                {#for element in types}
+                    <tr>
+                    <td>{element.name}</td>
+                    <td>{element.minValue}</td>
+                    <td>{element.maxValue}</td>
+                    <td>{element.onlyInteger}</td>
+                    <td>{element.multiplier}</td>
+                    </tr>
+                {/for}
+
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const labels = [12, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24]
+
+    console.log(labels)
+
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'Temperature Simulator Values',
+            backgroundColor: 'rgb(255,255,255)',
+            borderColor: 'rgb(255,152,0)',
+            data: [12, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24]
+        }]
+    };
+
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            scales: {
+                x: {
+                    display: false // Hide X axis labels
                 }
             }
-        };
-    </script>
-    <script>
-        const myChart = new Chart(
-            document.getElementById('myChart'),
-            config
-        );
-    </script>
+        }
+    };
 
+    const myChart = new Chart(
+        document.getElementById('myChart'),
+        config
+    );
+</script>
 </body>
 </html>
