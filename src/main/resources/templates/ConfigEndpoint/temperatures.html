@@ -71,6 +71,10 @@
             border-radius: 5px;
         }
 
+        .cardFull {
+            width: 100% !important;
+        }
+
         .card:hover {
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
         }
@@ -95,6 +99,7 @@
             bottom: 20px;
             right: 20px;
         }
+
         .toTopButton {
             background: #ff9800;
             padding: 10px;
@@ -104,10 +109,30 @@
             cursor: default;
             text-decoration: none;
         }
-        .toTopButton:hover{
+
+        .toTopButton:hover {
             box-shadow: 0 0 5px 5px #6e6e6e;
             transition: 0.5s;
             cursor: pointer;
+        }
+
+        /* Create two equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 300px; /* Should be removed. Only for demonstration */
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
+        * {
+            box-sizing: border-box;
         }
     </style>
 
@@ -116,7 +141,7 @@
 <div id="top">
     <ul>
         <li><a class="logo">Value-Simulator</a></li>
-        <li><a href="#visualization">Visualization ({temps.length})</a></li>
+        <li><a href="#visualization">Visualization ({temps.size})</a></li>
         <li><a href="#configuration">Configuration ({config.size})</a></li>
         <li><a href="#rooms">Rooms ({rooms.size()})</a></li>
         <li><a href="#types">Types ({types.size()})</a></li>
@@ -128,54 +153,13 @@
 </div>
 
 <div class="content">
+
     <div id="visualization">
         <h1>&lt;Visualization/&gt;</h1>
         <div class="card">
             <canvas id="myChart"></canvas>
         </div>
     </div>
-
-    <div id="configuration">
-        <h1>&lt;Configuration/&gt;</h1>
-
-        <div class="card">
-            <table>
-                <tr>
-                    <th>sendValues</th>
-                </tr>
-
-                {#for element in config}
-                    <tr>
-                    <td>{element.sendValues}</td>
-                    </tr>
-                {/for}
-
-            </table>
-        </div>
-    </div>
-
-    <div id="rooms">
-        <h1>&lt;Rooms/&gt;</h1>
-
-        <div class="card">
-            <table>
-                <tr>
-                    <th>Room</th>
-                    <th>Floor</th>
-                </tr>
-
-                {#for element in rooms}
-                    <tr>
-                    <td>{element.name}</td>
-                    <td>{element.floor}</td>
-                    </tr>
-                {/for}
-
-            </table>
-        </div>
-    </div>
-
-
     <div id="types">
         <h1>&lt;Value Types/&gt;</h1>
         <div class="card">
@@ -201,14 +185,55 @@
             </table>
         </div>
     </div>
+
+
+<div id="configuration">
+    <h1>&lt;Configuration/&gt;</h1>
+
+    <div class="card">
+        <table>
+            <tr>
+                <th>sendValues</th>
+            </tr>
+
+            {#for element in config}
+                <tr>
+                <td>{element.sendValues}</td>
+                </tr>
+            {/for}
+
+        </table>
+    </div>
+</div>
+
+<div id="rooms">
+    <h1>&lt;Rooms/&gt;</h1>
+
+    <div class="card">
+        <table>
+            <tr>
+                <th>Room</th>
+                <th>Floor</th>
+            </tr>
+
+            {#for element in rooms}
+                <tr>
+                <td>{element.name}</td>
+                <td>{element.floor}</td>
+                </tr>
+            {/for}
+
+        </table>
+    </div>
+</div>
 </div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const labels = [12, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24]
+    const labels = {temps}
 
-    console.log(labels)
+        console.log(labels)
 
     const data = {
         labels: labels,
@@ -216,7 +241,7 @@
             label: 'Temperature Simulator Values',
             backgroundColor: 'rgb(255,255,255)',
             borderColor: 'rgb(255,152,0)',
-            data: [12, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24, 18, 24]
+            data: {temps}
         }]
     };
 
