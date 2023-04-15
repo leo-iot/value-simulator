@@ -3,15 +3,13 @@ package at.htl.mqtt.client;
 import at.htl.mqtt.client.entity.Config;
 import at.htl.mqtt.client.entity.Room;
 import at.htl.mqtt.client.entity.Value;
+import io.quarkus.scheduler.Scheduled;
 import io.smallrye.reactive.messaging.mqtt.MqttMessage;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GeneratingValuesUtils {
     private static List<Double> goodTemps = new LinkedList<>();
@@ -22,6 +20,84 @@ public class GeneratingValuesUtils {
             return true;
         return c.get(0).sendValues;
     }
+
+    @Scheduled(every = "60s")
+    public void getValuesForRoom1() {
+        List<Room> rooms = Room.listAll();
+        getValueForRoom(rooms.get(0));
+    }
+
+
+    public static void getValueForRoom(Room room) {
+        int index = 0;
+
+        System.out.println("\ncurrentValue" + " / " +
+                "MinValue" + " / " +
+                "MaxValue" + " ==> " +
+                "Name");
+        System.out.println("---------------------");
+
+        for (Value v : room.getValues()) {
+
+            double currentValue = getIntValue(
+                    v.getValueType().getMinValue(),
+                    v.getValueType().getMaxValue(),
+                    v.getLastValue()
+            );
+            room.getValues().get(index).setLastValue(currentValue);
+
+            System.out.println(currentValue + " / " +
+                    v.getValueType().getMinValue() + " / " +
+                    v.getValueType().getMaxValue() + " ==> " +
+                    v.getValueType().getName());
+            index++;
+        }
+        System.out.println("---------------------");
+        room.persist();
+    }
+
+
+    public static Double getIntValue(int min, int max, double previous) {
+        Random rand = new Random();
+
+
+        if (previous <= 0 && min <= 0) {
+            return rand.nextDouble(min, max);
+        }
+
+
+        // Check if previous value is valid
+        if (previous < min) previous = min;
+        if (previous > max) previous = max;
+
+        double temp = previous * 0.10;
+
+        // Randomize if value increases/decreases
+        boolean subtract = rand.nextBoolean();
+
+        double subtractedValue = previous - temp;
+        double addedValue = previous + temp;
+
+        // Check if CURRENT value is valid
+        if (subtractedValue < min) subtractedValue = min;
+        if (addedValue > max) addedValue = max;
+
+
+        if (subtract) {
+            // SUBTRACT 10 PERCENT
+
+            if (subtractedValue <= min) return addedValue;
+
+            return subtractedValue;
+        } else {
+            // ADD 10 PERCENT
+
+            if (addedValue >= max) return subtractedValue;
+
+            return addedValue;
+        }
+    }
+
 
     public static void sendValueForRoom(Room room, Emitter<byte[]> emitter) {
         Map<String, Object> values = new HashMap<>();
