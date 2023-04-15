@@ -56,7 +56,7 @@
 
         h1 {
             font-family: "Fira Code";
-            padding-top: 100px;
+            padding-top: 30px;
         }
 
         :target h1 {
@@ -71,12 +71,24 @@
             border-radius: 5px;
         }
 
+        .cardMore {
+            width: 60% !important;
+        }
+
         .cardFull {
             width: 100% !important;
         }
 
         .card:hover {
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .alwaysActiveCard{
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+            padding: 20px;
+            width: 40%;
+            border-radius: 5px;
         }
 
         table {
@@ -134,12 +146,49 @@
         * {
             box-sizing: border-box;
         }
+
+        .right {
+            position: absolute;
+            right: 0;
+            padding: 10px;
+        }
+
+        .center {
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+        }
+
+        .visuBG {
+            background: linear-gradient(157deg, rgba(255, 113, 5, 1) 0%, rgba(215, 166, 0, 1) 100%);
+            padding-left: 0 !important;
+            padding-top: 100px;
+            border-radius: 20px;
+        }
+
+        .visuContent {
+            border-radius: 20px;
+            background: white;
+            z-index: 10000;
+        }
+
+        .visuTxt {
+            font-size: 200px;
+            position: absolute;
+            color: white;
+            text-shadow: 2px 2px 4px #000000;
+            font-family: 'Fira Code';
+        }
+
+        .removeH1Paddd {
+            padding-top: 0 !important;
+        }
     </style>
 
 </head>
 <body>
-<div id="top">
-    <ul>
+<div id="top" style="z-index: 100">
+    <ul style="z-index: 100;">
         <li><a class="logo">Value-Simulator</a></li>
         <li><a href="#visualization">Visualization ({temps.size})</a></li>
         <li><a href="#configuration">Configuration ({config.size})</a></li>
@@ -152,33 +201,60 @@
     <a class="toTopButton" href="#top">go up</a>
 </div>
 
-<div class="content">
+<div class="visuBG">
+    <div class="visuTxt">Leo</div>
+    <div class="visuTxt" style="right: 0!important">IOT</div>
 
-    <div id="visualization">
-        <h1>&lt;Visualization/&gt;</h1>
-        <div class="card">
+    <div id="visualization" class="center visuContent alwaysActiveCard">
+        <h1 style="align-self: center; text-align: center" class="removeH1Paddd">&lt;Visualization/&gt;</h1>
+        <div class="card cardFull">
             <canvas id="myChart"></canvas>
         </div>
     </div>
+</div>
+
+<div class="content">
     <div id="types">
-        <h1>&lt;Value Types/&gt;</h1>
+        <div style="float: right; padding-right: 40px">
+            <h1>&lt;Value Types/&gt;</h1>
+            <div class="card cardFull">
+                <table>
+                    <tr>
+                        <th>Name</th>
+                        <th>Min.</th>
+                        <th>Max.</th>
+                        <th>Only Integer</th>
+                        <th>Multiplier</th>
+                    </tr>
+
+                    {#for element in types}
+                        <tr>
+                        <td>{element.name}</td>
+                        <td>{element.minValue}</td>
+                        <td>{element.maxValue}</td>
+                        <td>{element.onlyInteger}</td>
+                        <td>{element.multiplier}</td>
+                        </tr>
+                    {/for}
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="configuration">
+        <h1>&lt;Configuration/&gt;</h1>
+
         <div class="card">
             <table>
                 <tr>
-                    <th>Name</th>
-                    <th>Min.</th>
-                    <th>Max.</th>
-                    <th>Only Integer</th>
-                    <th>Multiplier</th>
+                    <th>sendValues</th>
                 </tr>
 
-                {#for element in types}
+                {#for element in config}
                     <tr>
-                    <td>{element.name}</td>
-                    <td>{element.minValue}</td>
-                    <td>{element.maxValue}</td>
-                    <td>{element.onlyInteger}</td>
-                    <td>{element.multiplier}</td>
+                    <td>{element.sendValues}</td>
                     </tr>
                 {/for}
 
@@ -186,46 +262,26 @@
         </div>
     </div>
 
+    <div id="rooms">
+        <h1>&lt;Rooms/&gt;</h1>
 
-<div id="configuration">
-    <h1>&lt;Configuration/&gt;</h1>
-
-    <div class="card">
-        <table>
-            <tr>
-                <th>sendValues</th>
-            </tr>
-
-            {#for element in config}
+        <div class="card">
+            <table>
                 <tr>
-                <td>{element.sendValues}</td>
+                    <th>Room</th>
+                    <th>Floor</th>
                 </tr>
-            {/for}
 
-        </table>
+                {#for element in rooms}
+                    <tr>
+                    <td>{element.name}</td>
+                    <td>{element.floor}</td>
+                    </tr>
+                {/for}
+
+            </table>
+        </div>
     </div>
-</div>
-
-<div id="rooms">
-    <h1>&lt;Rooms/&gt;</h1>
-
-    <div class="card">
-        <table>
-            <tr>
-                <th>Room</th>
-                <th>Floor</th>
-            </tr>
-
-            {#for element in rooms}
-                <tr>
-                <td>{element.name}</td>
-                <td>{element.floor}</td>
-                </tr>
-            {/for}
-
-        </table>
-    </div>
-</div>
 </div>
 
 
