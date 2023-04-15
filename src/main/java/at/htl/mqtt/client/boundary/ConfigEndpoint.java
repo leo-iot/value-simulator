@@ -20,7 +20,7 @@ public class ConfigEndpoint {
     @CheckedTemplate
     public static class Templates {
         public static native TemplateInstance temperatures(
-                int[] temps,
+                List<Integer> temps,
                 List<Room> rooms,
                 List<ValueType> types,
                 List<Config> config
@@ -32,11 +32,12 @@ public class ConfigEndpoint {
     public TemplateInstance get() {
         List<Room> rooms = Room.listAll();
         List<Config> c = Config.listAll();
-
-        int[] myNum = {10, 20, 30, 40};
-
-
-
+        List<Integer> myNum = new ArrayList<>();
+        myNum.add(12);
+        myNum.add(15);
+        myNum.add(16);
+        myNum.add(18);
+        myNum.add(18);
 
         return Templates.temperatures(
                 myNum,
