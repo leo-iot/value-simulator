@@ -41,7 +41,7 @@ public class ConfigEndpoint {
 
         // Generate Test Data
         for (int i = 0; i < 240; i++) {
-            values = GeneratingValuesUtils.getValuesForRoom();
+            values = GeneratingValuesUtils.getValuesForRoomExampleData();
 
             for (Value v : values) {
                 if (Objects.equals(v.getValueType().getName(), "temperature")) {

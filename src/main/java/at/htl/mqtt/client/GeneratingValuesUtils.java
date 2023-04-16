@@ -9,11 +9,10 @@ import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.json.JSONObject;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class GeneratingValuesUtils {
-    private static List<Double> goodTemps = new LinkedList<>();
+    //private static List<Double> goodTemps = new LinkedList<>();
     private static final int AMOUNT_OF_ITERATIONS = 60;
 
     public static boolean checkSendingValues() {
@@ -24,16 +23,21 @@ public class GeneratingValuesUtils {
     }
 
     @Scheduled(every = "60s")
-    public void getValuesForRoom1() {
-        //List<Room> rooms = Room.listAll();
-        List<Value> vs = getValuesForRoom();
+    public void getValuesForRoomEveryMinute() {
+        List<Room> rooms = Room.listAll();
+        getValuesForRoom(rooms.get(0).getId());
+    }
+
+
+    public static List<Value> getValuesForRoomExampleData() {
+        List<Room> rooms = Room.listAll();
+        return getValuesForRoom(rooms.get(0).getId());
     }
 
 
     @Transactional
-    public static List<Value> getValuesForRoom() {
-        List<Room> rooms = Room.listAll();
-        Room room = rooms.get(1);
+    public static List<Value> getValuesForRoom(Long roomId) {
+        Room room = Room.find("id", roomId).firstResult();
 
         int index = 0;
         Random rand = new Random();
@@ -91,13 +95,11 @@ public class GeneratingValuesUtils {
                 v.setIterationsCount(v.getIterationsCount() + 1);
             }
 
-            //room.persist();
             room.getValues().get(index).setLastValue(currentDeviatingPoint);
             index++;
         }
         return room.getValues();
     }
-
 
     // returns the Y-Value of a given X-Value
     // on a straight between 2 given Points
@@ -158,12 +160,15 @@ public class GeneratingValuesUtils {
     }
 
 
+
+    // Send Values to MQTT server
     public static void sendValueForRoom(Room room, Emitter<byte[]> emitter) {
         Map<String, Object> values = new HashMap<>();
 
         values.put("time", System.currentTimeMillis());
-        for (Value value : room.getValues()) {
-            values.put(value.getValueType().getName(), getValue(value));
+
+        for (Value value : getValuesForRoom(room.getId())) {
+            values.put(value.getValueType().getName(), value.getLastValue());
         }
 
         JSONObject jsonValue = new JSONObject(values);
@@ -178,35 +183,6 @@ public class GeneratingValuesUtils {
         System.out.println("Sending value -> " + jsonValue);
     }
 
-    public static Object getValue(Value value) {
-        return newRandomValue(value);
-    }
-
-    private static double newRandomValue(Value value) {
-        double r = Math.random() * value.getValueType().getMultiplier();
-        double newVal = value.getLastValue();
-
-        if (newVal == 0) {
-            newVal = (double) (value.getValueType().getMinValue() + value.getValueType().getMaxValue()) / 2;
-        }
-
-        if (Math.round(Math.random()) == 0) {
-            newVal += r;
-        } else {
-            newVal -= r;
-        }
-
-        if (newVal > value.getValueType().getMaxValue() || newVal < value.getValueType().getMinValue()) {
-            newVal = newRandomValue(value);
-        }
-        value.setLastValue(newVal);
-        if (value.getValueType().isOnlyInteger()) {
-            return Math.round(newVal);
-        } else {
-            return newVal;
-        }
-    }
-
 
     public static byte[] getBytes(Object value, long timeStamp) {
         JSONObject json = new JSONObject();
@@ -214,24 +190,53 @@ public class GeneratingValuesUtils {
     }
 
 
-    public static double goodTemp() {
-        double hours = LocalDateTime.now().getHour() + ((LocalDateTime.now().getMinute() / 60.00 * 100.00) / 100.00);
-        //return (-0.01 * Math.pow(hours,3) + 0.2 * Math.pow(hours,2) + 10)+10;
+    // COMMENTED OUT UNUSED METHODS
 
-        double sum1 = -0.014 * Math.pow(hours, 3);
-        double sum2 = 0.4 * Math.pow(hours, 2);
-        double sum3 = -1.8 * hours + 11;
-
-        //System.out.println(sum1);
-        //System.out.println(sum2);
-        //System.out.println(sum3);
-        //System.out.println(hours);
-        //System.out.println(LocalDateTime.now().getMinute());
-
-        double sum = sum1 + sum2 + sum3;
-
-        goodTemps.add(sum);
-
-        return sum1 + sum2 + sum3;
-    }
+//    public static Object getValue(Value value) {
+//        return newRandomValue(value);
+//    }
+//    private static double newRandomValue(Value value) {
+//        double r = Math.random() * value.getValueType().getMultiplier();
+//        double newVal = value.getLastValue();
+//
+//        if (newVal == 0) {
+//            newVal = (double) (value.getValueType().getMinValue() + value.getValueType().getMaxValue()) / 2;
+//        }
+//
+//        if (Math.round(Math.random()) == 0) {
+//            newVal += r;
+//        } else {
+//            newVal -= r;
+//        }
+//
+//        if (newVal > value.getValueType().getMaxValue() || newVal < value.getValueType().getMinValue()) {
+//            newVal = newRandomValue(value);
+//        }
+//        value.setLastValue(newVal);
+//        if (value.getValueType().isOnlyInteger()) {
+//            return Math.round(newVal);
+//        } else {
+//            return newVal;
+//        }
+//    }
+//    public static double goodTemp() {
+//        double hours = LocalDateTime.now().getHour() + ((LocalDateTime.now().getMinute() / 60.00 * 100.00) / 100.00);
+//        //return (-0.01 * Math.pow(hours,3) + 0.2 * Math.pow(hours,2) + 10)+10;
+//
+//        double sum1 = -0.014 * Math.pow(hours, 3);
+//        double sum2 = 0.4 * Math.pow(hours, 2);
+//        double sum3 = -1.8 * hours + 11;
+//
+//        //System.out.println(sum1);
+//        //System.out.println(sum2);
+//        //System.out.println(sum3);
+//        //System.out.println(hours);
+//        //System.out.println(LocalDateTime.now().getMinute());
+//
+//        double sum = sum1 + sum2 + sum3;
+//
+//        goodTemps.add(sum);
+//
+//        return sum1 + sum2 + sum3;
+//    }
 }
