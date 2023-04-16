@@ -83,7 +83,7 @@
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
         }
 
-        .alwaysActiveCard{
+        .alwaysActiveCard {
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
             transition: 0.3s;
             padding: 20px;
@@ -287,18 +287,23 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const labels = {temps}
-
-        console.log(labels)
 
     const data = {
-        labels: labels,
-        datasets: [{
-            label: 'Temperature Simulator Values',
-            backgroundColor: 'rgb(255,255,255)',
-            borderColor: 'rgb(255,152,0)',
-            data: {temps}
-        }]
+        labels: {temps},
+        datasets: [
+            {
+                label: 'Temperature Simulator Values',
+                backgroundColor: 'rgb(255,255,255)',
+                borderColor: 'rgb(255,152,0)',
+                data: {temps}
+            },
+            {
+                label: 'Manhatten Regression',
+                backgroundColor: 'rgb(255,255,255)',
+                borderColor: 'rgb(0,255,13)',
+                data: {tempsMidLane}
+            }
+        ]
     };
 
     const config = {
