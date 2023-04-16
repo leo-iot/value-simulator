@@ -18,7 +18,7 @@ public class Room extends PanacheEntityBase {
     private String floor;
 
     @JsonbTransient
-    @OneToMany(mappedBy = "room")
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Value> values = new ArrayList<>();
 
     public Room(String name, String floor) {
