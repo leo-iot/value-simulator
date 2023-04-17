@@ -46,7 +46,14 @@ public class ConfigEndpoint {
             for (Value v : values) {
                 if (Objects.equals(v.getValueType().getName(), "temperature")) {
                     myNum.add(v.getLastValue());
-                    tempsMidLane.add(v.getNextFullValue());
+                    tempsMidLane.add(
+                            GeneratingValuesUtils.calcPointOnStraight(
+                                    v.getLastFullValue(),
+                                    v.getAmountOfIterations(),
+                                    v.getNextFullValue(),
+                                    v.getIterationsCount()
+                            )
+                    );
                 }
             }
         }
